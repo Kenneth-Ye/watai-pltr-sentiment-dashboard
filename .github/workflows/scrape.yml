@@ -2,16 +2,14 @@ name: Palantir Sentiment Analysis
 
 on:
   schedule:
-    # Run every hour at minute 15 (to avoid peak times)
-    - cron: '15 * * * *'
+    - cron: '*/30 * * * *'
   
-  # Allow manual triggering for testing
   workflow_dispatch:
     inputs:
       debug:
         description: 'Enable debug logging'
         required: false
-        default: 'false'
+        default: false
         type: boolean
 
   # Run on push to main for testing (remove in production)
@@ -30,13 +28,13 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
       with:
-        fetch-depth: 1  # Shallow clone for faster checkout
+        fetch-depth: 1
     
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
         python-version: '3.11'
-        cache: 'pip'  # Cache pip dependencies
+        cache: 'pip'
     
     - name: Install dependencies
       working-directory: ./backend

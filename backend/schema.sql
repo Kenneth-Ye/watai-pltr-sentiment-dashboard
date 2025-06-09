@@ -101,6 +101,19 @@ FROM sentiment_analysis
 WHERE scraped_at >= NOW() - INTERVAL '24 hours'
 ORDER BY scraped_at DESC;
 
+CREATE VIEW frontend_realtime AS
+SELECT 
+    id,
+    headline,
+    source,
+    scraped_at,
+    sentiment_compound,
+    classification,
+    EXTRACT(EPOCH FROM (NOW() - scraped_at))/60 as minutes_ago
+FROM sentiment_analysis 
+WHERE scraped_at >= NOW() - INTERVAL '30 minutes'
+ORDER BY scraped_at DESC;
+
 -- View for hourly aggregations
 CREATE VIEW hourly_sentiment_summary AS
 SELECT 
