@@ -106,7 +106,7 @@ class PalantirSentimentAnalyzer:
                                     headline = {
                                         'text': text,
                                         'timestamp': datetime.now().isoformat(),
-                                        'source': 'yahoo_finance',
+                                        'source': 'Yahoo Finance',
                                         'source_url': source_url
                                     }
                                     headlines_found.append(headline)
