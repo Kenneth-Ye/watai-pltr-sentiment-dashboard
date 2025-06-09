@@ -257,5 +257,4 @@ DEBUG=true python scraper.py
 - **GitHub Actions**: ~2-3 minutes of the 2000 free minutes/month
 
 ## License
-
-This project is for educational purposes. Respect Yahoo Finance's robots.txt and terms of service. 
+MIT

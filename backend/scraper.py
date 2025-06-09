@@ -95,7 +95,7 @@ class PalantirSentimentAnalyzer:
                             if text and len(text) > 10:  # Filter out very short text
                                 # Check if it's Palantir-related
                                 text_lower = text.lower()
-                                if any(keyword in text_lower for keyword in ['palantir', 'pltr', 'karp', 'foundry', 'gotham', 'aip']):
+                                if any(keyword in text_lower for keyword in ['palantir', 'pltr', 'karp', 'foundry', 'gotham', 'aip', 'ai']):
                                     logger.info(f"   ✅ PALANTIR MATCH: {text}")
                                     
                                     # Try to get the link
