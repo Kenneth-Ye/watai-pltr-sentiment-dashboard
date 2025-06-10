@@ -20,22 +20,26 @@ class SupabaseClient:
     def save_sentiment_data(self, results: List[Dict]) -> int:
         """Save sentiment analysis results to Supabase"""
         if not results:
-            logger.warning("No results to save")
+            logger.warning("No results provided to save")
             return 0
         
         try:
             # Prepare data for insertion
             rows = []
+            skipped_count = 0
+            
             for result in results:
                 # Check if headline already exists to avoid duplicates
+                # Extended time window to 7 days to catch more duplicates
                 existing = self.client.table('sentiment_analysis')\
-                    .select('id')\
+                    .select('id, scraped_at')\
                     .eq('headline', result['text'])\
-                    .gte('scraped_at', (datetime.now() - timedelta(hours=24)).isoformat())\
+                    .gte('scraped_at', (datetime.now() - timedelta(days=7)).isoformat())\
                     .execute()
                 
                 if existing.data:
-                    logger.debug(f"Skipping duplicate headline: {result['text'][:50]}...")
+                    skipped_count += 1
+                    logger.debug(f"Skipping duplicate headline (last seen: {existing.data[0]['scraped_at']}): {result['text'][:50]}...")
                     continue
                 
                 row = {
@@ -51,11 +55,13 @@ class SupabaseClient:
                 }
                 rows.append(row)
             
+            logger.info(f"Processed {len(results)} headlines: {len(rows)} new, {skipped_count} duplicates")
+            
             if not rows:
                 logger.info("All headlines were duplicates, nothing to save")
                 return 0
             
-            # Insert data in batches of 100
+            # Insert data in batches of 100 with error handling for constraints
             batch_size = 100
             total_inserted = 0
             
