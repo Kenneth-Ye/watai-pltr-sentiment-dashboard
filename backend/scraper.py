@@ -44,7 +44,7 @@ class PalantirSentimentAnalyzer:
     def scrape_yahoo_headlines(self):
         """Scrape Palantir headlines from Yahoo Finance"""
         urls = [
-            'https://finance.yahoo.com/quote/PLTR/?tab=news',
+            'https://finance.yahoo.com/quote/PLTR/',
         ]
         
         all_headlines = []
@@ -82,7 +82,7 @@ class PalantirSentimentAnalyzer:
                 headlines_found = []
 
                 selectors = [
-                    'div.stream-item h3',
+                    'h3.clamp',
                 ]
                 
                 for selector in selectors:
